@@ -37,17 +37,7 @@ with open("/home/ubuntu/repeats_in_proteins/genes_exons.gff", "r") as genes_exon
             if match.group(0) in multiexonic_list:
                 multiexonic.write(f"{line}")
       
-      
-class Gff(object):
-    def __init__(self, line):
-        self.chrom, self.source, self.feature, self.start, self.end, self.score, self.strand, self.frame, self.attribute = line.split('\t')
-        self.start = int(self.start)
-        self.end = int(self.end)
-    def print_gff(self):
-        return f"{self.chrom}\t{self.source}\t{self.feature}\t{self.start}\t{self.end}\t{self.score}\t{self.strand}\t{self.frame}\t{self.attribute}"
-
-      
-      
+         
 #creating a list of genomic features intervals
 interval_list=dict()
 i = 0
@@ -65,29 +55,6 @@ for id, elem in interval_list.items():
 interval_list.pop(105867)
 
 
-def intervalListToIntervalTree(interval_list):
-    r"""
-    given a dictionary containing tuples of chrom, start, end,
-    this is transformed to an interval trees. To each
-    interval an id is assigned, this id corresponds to the
-    position of the interval in the given array of tuples
-    and if needed can be used to identify
-    the index of a row/colum in the hic matrix.
-
-    >>> bin_list = [('chrX', 0, 50000), ('chrX', 50000, 100000)]
-    >>> res = intervalListToIntervalTree(bin_list)
-    >>> sorted(res['chrX'])
-    [Interval(0, 50000, 0), Interval(50000, 100000, 1)]
-    """
-    bin_int_tree = {}
-
-    for intval_id, intval in interval_list.items():
-        chrom, start, end = intval.chrom, int(intval.start), int(intval.end)
-        if chrom not in bin_int_tree:
-            bin_int_tree[chrom] = IntervalTree()
-        bin_int_tree[chrom].add(Interval(start, end, intval_id))
-
-    return bin_int_tree 
   
 #interval tree of genomic features
 exon_tree = intervalListToIntervalTree(interval_list)
